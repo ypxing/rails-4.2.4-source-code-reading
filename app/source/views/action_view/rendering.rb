@@ -5,6 +5,7 @@ module Views
 			include Views::ActionView::Layouts
 
 			def lookup_context
+				controller.lookup_context
 			end
 		end
 	end

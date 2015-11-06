@@ -117,10 +117,12 @@ module Views
 
 			end
 
+			# one simple check
 			def _include_layout?(options)
 				controller.send(:_include_layout?, options)
 			end
 
+			# layout is set here
 			def _layout_for_option(layout)
 				controller.send(:_layout_for_option, layout)
 			end
