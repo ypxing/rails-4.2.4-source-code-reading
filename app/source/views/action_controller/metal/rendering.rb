@@ -1,14 +1,19 @@
-module View
+module Views
 	module ActionController
-		module Rendering
+    module Metal
+  		module Rendering
+        include Views::AbstractController::Rendering
 
-    # Normalize arguments by catching blocks and setting them on :update.
-    def _normalize_args(action=nil, options={}, &blk) #:nodoc:
-      options = super
-      options[:update] = blk if block_given?
-      options
+        def _normalize_text(options)
+          # RENDER_FORMATS_IN_PRIORITY = [:body, :text, :plain, :html]
+          ::ActionController::Rendering::RENDER_FORMATS_IN_PRIORITY.each do |format|
+            if options.key?(format) && options[format].respond_to?(:to_text)
+              options[format] = options[format].to_text
+            end
+          end
+        end
+
+  		end
     end
-
-		end
 	end
 end

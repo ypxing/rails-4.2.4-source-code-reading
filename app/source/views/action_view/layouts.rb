@@ -70,7 +70,7 @@ module Views
 	    	# lookup_context.find_all(implied_layout_name, prefixes).first || super
 	    	# super here should be _layout defined in ancestors of controller.class
 	    	lookup_context.find_all(implied_layout_name, prefixes).first ||
-	    		controller.class.superclass.instance_method(:_layout).bind(controller).call
+	    		controller.class.supermodule.instance_method(:_layout).bind(controller).call
 	    end
 
 	    def lookup_context

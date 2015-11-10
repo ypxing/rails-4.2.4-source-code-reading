@@ -6,4 +6,8 @@ class Module
 	.map { |x| x.instance_method(instance_method) }
 	.map { |m| location ? m.source_location : m }
   end
+
+  def supermodule
+  	ancestors[ancestors.index(self) + 1]
+  end
 end

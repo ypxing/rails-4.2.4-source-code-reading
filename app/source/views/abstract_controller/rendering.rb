@@ -1,7 +1,6 @@
 module Views
 	module AbstractController
 		module Rendering
-			include Plain
 
 	    # # Normalize arguments, options and then delegates render_to_body and
 	    # # sticks the result in self.response_body.
@@ -14,7 +13,7 @@ module Views
 	    # end
 			def render *options, &block
 	      options = _normalize_render(*options, &block)
-	      controller.response_body = controller.render_to_body(options)
+	      controller.response_body = render_to_body(options)
 	      controller.send(:_process_format, controller.rendered_format, options) if controller.rendered_format
 	      controller.response_body
 			end
@@ -117,6 +116,38 @@ module Views
 
 			end
 
+			#<UnboundMethod: ActionController::Streaming#_process_options>
+			#<UnboundMethod: ActionController::Rendering#_process_options>
+			#<UnboundMethod: AbstractController::Rendering#_process_options>
+      def _process_options(options) #:nodoc:
+
+      	# action_controller/metal/rendering.rb
+		    _normalize_text(options)
+
+		    if options[:html]
+		      options[:html] = ERB::Util.html_escape(options[:html])
+		    end
+
+		    if options.delete(:nothing)
+		      options[:body] = nil
+		    end
+
+		    if options[:status]
+		      options[:status] = Rack::Utils.status_code(options[:status])
+		    end
+
+		    # action_controller/metal/streaming.rb
+        if options[:stream]
+          if env["HTTP_VERSION"] == "HTTP/1.0"
+            options.delete(:stream)
+          else
+            headers["Cache-Control"] ||= "no-cache"
+            headers["Transfer-Encoding"] = "chunked"
+            headers.delete("Content-Length")
+          end
+        end
+      end
+
 			# one simple check
 			def _include_layout?(options)
 				controller.send(:_include_layout?, options)
@@ -125,6 +156,19 @@ module Views
 			# layout is set here
 			def _layout_for_option(layout)
 				controller.send(:_layout_for_option, layout)
+			end
+
+			#<UnboundMethod: ActionController::Renderers#render_to_body>
+			#<UnboundMethod: ActionController::Rendering#render_to_body>
+			#<UnboundMethod: ActionView::Rendering#render_to_body>
+			#<UnboundMethod: AbstractController::Rendering#render_to_body>
+			def render_to_body(options)
+				controller.render_to_body(options)
+			end
+
+			# try to call to_text method of the given format (like :body, :text, :plain, :html)
+			def _normalize_text(options)
+				controller.send(:_normalize_text, options)
 			end
 
 		end
