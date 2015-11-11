@@ -2,7 +2,7 @@
 module Views
 	module ActionView
 		module ViewPaths
-			include Views::ActionView::Layouts
+			include Views::ActionView::Rendering
 
 			# irb(main):027:0> controller._prefixes
 			# => ["users", "application"]

@@ -171,6 +171,22 @@ module Views
 				controller.send(:_normalize_text, options)
 			end
 
+	    def view_assigns
+	    	# _protected_ivars:
+		    # DEFAULT_PROTECTED_INSTANCE_VARIABLES = Set.new %w(
+		    #   @_action_name @_response_body @_formats @_prefixes @_config
+		    #   @_view_context_class @_view_renderer @_lookup_context
+		    #   @_routes @_db_runtime
+		    # ).map(&:to_sym)
+	      protected_vars = controller._protected_ivars
+	      variables      = controller.instance_variables
+
+	      variables.reject! { |s| protected_vars.include? s }
+	      variables.each_with_object({}) { |name, hash|
+	        hash[name.slice(1, name.length)] = controller.instance_variable_get(name)
+	      }
+	    end
+
 		end
 	end
 end
