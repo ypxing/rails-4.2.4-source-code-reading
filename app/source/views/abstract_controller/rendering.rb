@@ -106,6 +106,7 @@ module Views
           options[:prefixes] ||= controller._prefixes
         end
 
+        # this is why you don't need to set action
         options[:template] ||= (options[:action] || controller.action_name).to_s
 
         # action_view/layouts.rb          342

@@ -1,7 +1,8 @@
 module Views
+
   class Render
 
-    attr_reader :controller#, :options
+    attr_reader :controller
 
     # "users"
     # set "action_name" if you need use action_name helper in view
@@ -21,6 +22,8 @@ module Views
     # *options may be
     # (1) :show, { ... } (will be changed to { action: :show, ... } by AbstractController::Rendering#_normalize_args)
     # (2) { ... }
+
+    # will be in Views::AbstractController::Rendering
     def render *options, &block
       controller.render *options, &block
     end
