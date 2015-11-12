@@ -79,6 +79,31 @@ module Views
 
 		      @lookup_context.formats = formats | @lookup_context.formats
 		    end
+
+		    # Renders the given template. A string representing the layout can be
+		    # supplied as well.
+		    def render_template(template, layout_name = nil, locals = nil) #:nodoc:
+		      view, locals = @view, locals || {}
+
+		      render_with_layout(layout_name, locals) do |layout|
+		        instrument(:template, :identifier => template.identifier, :layout => layout.try(:virtual_path)) do
+		          template.render(view, locals) { |*name| view._layout_for(*name) }
+		        end
+		      end
+		    end
+
+		    def render_with_layout(path, locals) #:nodoc:
+		      layout  = path && find_layout(path, locals.keys)
+		      content = yield(layout)
+
+		      if layout
+		        view = @view
+		        view.view_flow.set(:layout, content)
+		        layout.render(view, locals){ |*name| view._layout_for(*name) }
+		      else
+		        content
+		      end
+		    end
 			end
 		end
 	end

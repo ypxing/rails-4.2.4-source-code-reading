@@ -3,15 +3,23 @@ module Views
 	module ActionView
 		module Renderer
 			module Renderer
-				include Views::ActionView::ViewPaths
+				# include Views::ActionView::ViewPaths
 
-				def view_renderer
-					@_view_renderer ||= Views::ActionView::Renderer::Renderer::Renderer.new(lookup_context)
+				# def self.extended(mod)
+					::ActionView::Renderer.send(:include, self)
+				# end
+
+				def self.included(mod)
+					mod.remove_existing_instance_methods(self)
 				end
 
-				class Renderer
+				# def view_renderer
+				# 	@_view_renderer ||= Views::ActionView::Renderer::Renderer::Renderer.new(lookup_context)
+				# end
 
-			    attr_accessor :lookup_context
+				# class Renderer
+
+			 #    attr_accessor :lookup_context
 
 			    def initialize(lookup_context)
 			      @lookup_context = lookup_context
@@ -50,7 +58,7 @@ module Views
 			    def render_partial(context, options, &block) #:nodoc:
 			      ::ActionView::PartialRenderer.new(lookup_context).render(context, options, block)
 			    end
-				end
+				# end
 			end
 		end
 	end

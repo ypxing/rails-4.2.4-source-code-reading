@@ -8,7 +8,7 @@ module Views
 		    # DEFAULT_PATTERN = ":prefix/:action{.:locale,}{.:formats,}{+:variants,}{.:handlers,}"
 
 				def self.extended(mod)
-					::ActionView::OptimizedFileSystemResolver.send(:include, ::Views::ActionView::Template::Resolver)
+					::ActionView::OptimizedFileSystemResolver.send(:include, self)
 				end
 
 				def self.included(mod)
