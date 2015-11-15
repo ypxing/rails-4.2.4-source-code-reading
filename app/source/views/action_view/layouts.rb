@@ -9,6 +9,8 @@ module Views
 			end
 
 			# from options[:layout] of "render" method
+			# in most cases, Proc.new { _default_layout(false) } will be returned
+			# this proc will be used in ::ActionView::TemplateRenderer to resolve_layout
 			def _layout_for_option(name)
 	      case name
 	      when String     then _normalize_layout(name)
@@ -47,6 +49,7 @@ module Views
 			    # each controller can define it's own _layout
 			    # by default, it will "lookup_context.find_all('#{_implied_layout_name}', #{prefixes.inspect}).first || super"
 			    # _implied_layout_name is "controller_path" (e.g. "users") and prefixes is like ["layouts"]
+
 	        value = _layout if controller.send(:action_has_layout?)
 	      rescue NameError => e
 	        raise e, "Could not render layout: #{e.message}"
@@ -69,6 +72,10 @@ module Views
 	    	prefixes    = implied_layout_name =~ /\blayouts/ ? [] : ["layouts"]
 	    	# lookup_context.find_all(implied_layout_name, prefixes).first || super
 	    	# super here should be _layout defined in ancestors of controller.class
+
+	    	# 0. prefixes would be like ["layouts"]
+	    	# 1. implied_layout_name would be like "users" for UsersController
+	    	# 2. it would be "application" for ApplicationController
 	    	lookup_context.find_all(implied_layout_name, prefixes).first ||
 	    		controller.class.supermodule.instance_method(:_layout).bind(controller).call
 	    end

@@ -3,14 +3,7 @@ module Views
 		module Template
 			# ::ActionView::OptimizedFileSystemResolver is one class in Rails
 			module Resolver
-				include Views::ActionView::ViewPaths
-
 		    # DEFAULT_PATTERN = ":prefix/:action{.:locale,}{.:formats,}{+:variants,}{.:handlers,}"
-
-				def self.extended(mod)
-					::ActionView::OptimizedFileSystemResolver.send(:include, self)
-				end
-
 				def self.included(mod)
 					mod.remove_existing_instance_methods(:build_query)
 				end
@@ -83,6 +76,8 @@ module Views
 		      # so the result would be like /.../app/views/users/show{.en,}{.html...
 		      query + exts
 		    end
+
+		    ::ActionView::OptimizedFileSystemResolver.send(:include, self)
 		  end
 		end
 	end

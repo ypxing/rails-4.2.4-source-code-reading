@@ -2,11 +2,6 @@ module Views
 	module ActionView
 		# ::ActionView::PathSet is one Class in Rails
 		module PathSet
-			include Views::ActionView::ViewPaths
-
-			def self.extended(mod)
-				::ActionView::PathSet.send(:include, Views::ActionView::PathSet)
-			end
 
 			def self.included(mod)
 				mod.remove_existing_instance_methods(self)
@@ -66,6 +61,8 @@ module Views
 	        end
 	      end
 	    end
+
+	    ::ActionView::PathSet.send(:include, Views::ActionView::PathSet)
 		end
 	end
 end
