@@ -2,18 +2,13 @@
 module Views
 	module ActionView
 		module Rendering
-			include Views::ActionView::Layouts
+			include Views::AbstractController::Rendering
 
 	    def render_to_body(options = {})
 	    	# in Views::AbstractController::Rendering
 	      _process_options(options)
 
 	      _render_template(options)
-	    end
-
-	    # will be define in Views::ActionView::ViewPaths
-	    def lookup_context
-	    	controller.lookup_context
 	    end
 
 	    def view_renderer
@@ -23,6 +18,8 @@ module Views
 	    def view_context
 	    	# view_assigns is defined in abstract controller
 	    	# view_context_class.new(view_renderer, view_assigns, self)
+        # each pair (key/value) in view_assigns will become one instance variable
+        # and its value in instance of view_context_class.
 	    	view_context_class.new(view_renderer, view_assigns, controller)
 	    end
 

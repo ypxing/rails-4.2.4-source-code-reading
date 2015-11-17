@@ -14,9 +14,6 @@ module Views
           ActionDispatch::Request.new({"rack.methodoverride.original_method" => "GET"})
 
       controller.send(:set_response!, controller.request)
-
-      # temp
-      controller.instance_variable_set(:@count, 1)
     end
 
     # *options may be

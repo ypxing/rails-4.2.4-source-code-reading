@@ -1,7 +1,7 @@
 module Views
   module ActionView
     module Handlers
-      # ::ActionView::Template::Handlers 
+      # ::ActionView::Template::Handlers
       module ERB
         def self.included(mod)
           mod.remove_existing_instance_methods(self)

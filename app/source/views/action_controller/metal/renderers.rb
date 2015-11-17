@@ -2,7 +2,7 @@ module Views
 	module ActionController
 		module Metal
 			module Renderers
-				include Views::AbstractController::Rendering
+				include Views::ActionController::Rendering
 
 				def render_to_body(options)
 					# _render_to_body_with_renderer(options) || super

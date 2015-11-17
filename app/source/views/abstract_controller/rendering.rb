@@ -14,7 +14,7 @@ module Views
 			def render *options, &block
 	      options = _normalize_render(*options, &block)
 	      controller.response_body = render_to_body(options)
-	      controller.send(:_process_format, controller.rendered_format, options) if controller.rendered_format
+	      _process_format(controller.rendered_format, options) if controller.rendered_format
 	      controller.response_body
 			end
 
@@ -147,6 +147,25 @@ module Views
             headers.delete("Content-Length")
           end
         end
+      end
+
+			#<UnboundMethod: ActionController::Rendering#_process_format>
+			#<UnboundMethod: ActionView::Rendering#_process_format>
+			#<UnboundMethod: AbstractController::Rendering#_process_format>
+      def _process_format(format, options = {})
+      	#<UnboundMethod: ActionView::Rendering#_process_format>
+      	# before the assignment, controller.lookup_context.formats is
+      	# [:html, :text, :js, :css, :ics, :csv, :vcf, :png, :jpeg, :gif, :bmp, :tiff, :mpeg, :xml, :rss, :atom, :yaml, :multipart_form, :url_encoded_form, :json, :pdf, :zip]
+      	# # after the assignment, it is [:html]
+        controller.lookup_context.formats = [format.to_sym]
+        controller.lookup_context.rendered_format = controller.lookup_context.formats.first
+
+        #<UnboundMethod: ActionController::Rendering#_process_format>
+	      if options[:plain]
+	        controller.content_type = Mime::TEXT
+	      else
+	        controller.content_type ||= format.to_s
+	      end
       end
 
 			# one simple check

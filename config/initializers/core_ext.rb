@@ -21,4 +21,17 @@ class Module
       remove_method(m) rescue nil
     end
   end
+
+  def copy_existing_instance_methods(mod)
+    methods = Module === mod ?
+      (mod.instance_methods(false) + mod.private_instance_methods(false) + mod.protected_instance_methods(false)) : Array(mod)
+
+    [nil, 'private', 'protected'].each do |perm|
+      perm_s = "#{perm ? perm + '_' : ''}"
+      mod.send("#{perm_s}instance_methods", false).each do |m|
+        define_method(m, mod.send("#{perm_s}instance_method"))
+        send("#{perm}", m) if perm
+      end
+    end
+  end
 end

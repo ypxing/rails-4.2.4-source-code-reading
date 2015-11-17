@@ -88,6 +88,8 @@ module Views
 		        	# template is one instance of ::ActionView::Template
 		        	# it's the template for like "app/views/users/show.html.erb"
 		        	# view is view_context.
+		        	# view._layout_for is to handle <%= yield :name_of_captured_content %>
+		        	# name_of_captured_content should have been defined by <% content_for :name_of_captured_content...
 		          template.render(view, locals) { |*name| view._layout_for(*name) }
 		        end
 		      end
@@ -96,11 +98,19 @@ module Views
 		    def render_with_layout(path, locals) #:nodoc:
 		    	# find_layout will trigger finding ::ActionView::Template for "layout"
 		      layout  = path && find_layout(path, locals.keys)
+
+		      # template like ".../show.html.erb" has been rendered first
 		      content = yield(layout)
 
 		      if layout
 		        view = @view
+
+		        # "content" here is the compiled template.
+		        # set it as the content of :layout
 		        view.view_flow.set(:layout, content)
+
+		        # <%= yield %> pass nil as "name" to { |*name| view._layout_for(*name) }
+		        # so :layout will be used and above "content" will be used then
 		        layout.render(view, locals){ |*name| view._layout_for(*name) }
 		      else
 		        content

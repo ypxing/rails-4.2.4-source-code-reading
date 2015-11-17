@@ -1,1 +1,3 @@
-<%= @count %>
+<% assigns.each do |ivar, val| %>
+	<%= ivar %> is <%= val %>
+<% end %>
