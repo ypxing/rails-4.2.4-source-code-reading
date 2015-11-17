@@ -7,10 +7,7 @@ module Views
     OutputBuffer = ::ActionView::OutputBuffer
 
 		module Template
-
-			def self.included(mod)
-				mod.remove_existing_instance_methods(self)
-			end
+      extend ModuleSwitch
 
 	    # Render a template. If the template was not compiled yet, it is done
 	    # exactly before rendering.
@@ -153,8 +150,6 @@ module Views
           m
         end
       end
-
-	    ::ActionView::Template.send(:include, self)
 		end
 	end
 end

@@ -3,6 +3,8 @@ module Views
 		# make it class just because it's one class in Rails
 		module LookupContext
 			module ViewPaths
+				extend ModuleSwitch
+
 				# TemplateRender will call find_template which has been delegated to lookup_context.
 				# lookup_context includes module ::ActionView::LookupContext::ViewPaths.
 				# name: "show"
@@ -72,7 +74,7 @@ module Views
 	        return name, prefixes
 	      end
 
-		    ::ActionView::LookupContext.send(:include, self)
+		    # ::ActionView::LookupContext.send(:include, self)
 			end
 		end
 	end

@@ -5,19 +5,12 @@ module ModuleSwitch
   end
 
   def disable
-    shim_const.remove_existing_instance_methods(shim_const)
+    target_const.remove_instance_methods_from_ancestors("#{name}::SHIM")
   end
 
   def shim_const
     @shim ||= const_defined?('SHIM') ? const_get('SHIM') :
-      const_set('SHIM', Module.new do
-        def self.prepended(mod)
-          mod.ancestors.each do |anc|
-            # just reset all SHIM module
-            anc.remove_existing_instance_methods(anc) if anc.name == name
-          end
-        end
-      end)
+      const_set('SHIM', Module.new{ def self.prepended(mod); mod.remove_instance_methods_from_ancestors(name); super; end })
   end
 
   def target_const

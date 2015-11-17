@@ -1,7 +1,7 @@
 module Views
 	module ActionView
 		module Layouts
-			include Views::AbstractController::Rendering
+			extend ModuleSwitch
 
 			# when layout should be used
 			def _include_layout?(options)

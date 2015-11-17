@@ -29,9 +29,16 @@ class Module
     [nil, 'private', 'protected'].each do |perm|
       perm_s = "#{perm ? perm + '_' : ''}"
       mod.send("#{perm_s}instance_methods", false).each do |m|
-        define_method(m, mod.send("#{perm_s}instance_method", m))
+        define_method(m, mod.instance_method(m))
         send("#{perm}", m) if perm
       end
+    end
+  end
+
+  def remove_instance_methods_from_ancestors(anc_name)
+    ancestors.each do |anc|
+      # just reset all SHIM module
+      anc.remove_existing_instance_methods(anc) if anc.name == anc_name
     end
   end
 end

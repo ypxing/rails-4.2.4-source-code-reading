@@ -2,7 +2,7 @@
 module Views
 	module ActionView
 		module Rendering
-			include Views::AbstractController::Rendering
+			extend ModuleSwitch
 
 	    def render_to_body(options = {})
 	    	# in Views::AbstractController::Rendering

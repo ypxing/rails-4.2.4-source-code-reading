@@ -1,6 +1,7 @@
 module Views
 	module AbstractController
 		module Rendering
+			extend ModuleSwitch
 
 	    # # Normalize arguments, options and then delegates render_to_body and
 	    # # sticks the result in self.response_body.
