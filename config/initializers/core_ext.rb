@@ -5,8 +5,8 @@ class Module
         ancestor.protected_instance_methods(false) +
         ancestor.private_instance_methods(false)).include?(instance_method)
     end
-	.map { |x| x.instance_method(instance_method) }
-	.map { |m| location ? m.source_location : m }
+  	.map { |x| x.instance_method(instance_method) }
+  	.map { |m| location ? m.source_location : m }.uniq
   end
 
   def supermodule
@@ -29,7 +29,7 @@ class Module
     [nil, 'private', 'protected'].each do |perm|
       perm_s = "#{perm ? perm + '_' : ''}"
       mod.send("#{perm_s}instance_methods", false).each do |m|
-        define_method(m, mod.send("#{perm_s}instance_method"))
+        define_method(m, mod.send("#{perm_s}instance_method", m))
         send("#{perm}", m) if perm
       end
     end

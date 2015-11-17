@@ -2,20 +2,7 @@
 module Views
 	module ActionView
 		module ViewPaths
-			SHIM = self.dup
-
-
-			def self.prepended(mod)
-				binding.pry
-			end
-
-			def self.enable
-				::ActionView::ViewPaths.send(:prepend, SHIM)
-			end
-
-			def self.disable
-				::ActionView::ViewPaths.send(:prepend, SHIM)
-			end
+			extend ModuleSwitch
 
 			# irb(main):027:0> controller._prefixes
 			# => ["users", "application"]
@@ -28,5 +15,3 @@ module Views
 		end
 	end
 end
-
-# ActionView::ViewPaths.send(:prepend, Views::ActionView::ViewPaths)
