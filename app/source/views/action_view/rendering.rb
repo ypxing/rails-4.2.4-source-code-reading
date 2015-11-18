@@ -64,6 +64,55 @@ module Views
         end
 
       end
+
+      # Assign the rendered format to lookup context.
+      def _process_format(format, options = {}) #:nodoc:
+        # super
+        super_method(__callee__, format, options)
+
+        # before the assignment, lookup_context.formats is
+        # [:html, :text, :js, :css, :ics, :csv, :vcf, :png, :jpeg, :gif, :bmp, :tiff, :mpeg, :xml, :rss, :atom, :yaml, :multipart_form, :url_encoded_form, :json, :pdf, :zip]
+        # after the assignment, it is [:html]
+        lookup_context.formats = [format.to_sym]
+        lookup_context.rendered_format = lookup_context.formats.first
+      end
+
+      # Normalize args by converting render "foo" to render :action => "foo" and
+      # render "foo/bar" to render :template => "foo/bar".
+      # :api: private
+      def _normalize_args(action=nil, options={})
+        # options = super(action, options)
+        options = super_method(__callee__, action, options)
+        case action
+        when NilClass
+        when Hash
+          options = action
+        when String, Symbol
+          action = action.to_s
+          key = action.include?(?/) ? :template : :action
+          options[key] = action
+        else
+          options[:partial] = action
+        end
+
+        options
+      end
+
+      # Normalize options.
+      # :api: private
+      def _normalize_options(options)
+        options = super_method(__callee__, options)
+        if options[:partial] == true
+          options[:partial] = action_name
+        end
+
+        if (options.keys & [:partial, :file, :template]).empty?
+          options[:prefixes] ||= _prefixes
+        end
+
+        options[:template] ||= (options[:action] || action_name).to_s
+        options
+      end
 		end
 	end
 end

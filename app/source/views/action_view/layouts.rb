@@ -3,6 +3,15 @@ module Views
 		module Layouts
 			extend ModuleSwitch
 
+	    def _normalize_options(options) # :nodoc:
+	      super_method(__callee__, options)
+
+	      if _include_layout?(options)
+	        layout = options.delete(:layout) { :default }
+	        options[:layout] = _layout_for_option(layout)
+	      end
+	    end
+
 			# when layout should be used
 			def _include_layout?(options)
 				(options.keys & [:body, :text, :plain, :html, :inline, :partial]).empty? || options.key?(:layout)

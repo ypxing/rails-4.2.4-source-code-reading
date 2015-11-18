@@ -9,8 +9,8 @@ class Module
   	.map { |m| location ? m.source_location : m }.uniq
   end
 
-  def supermodule
-  	ancestors[ancestors.index(self) + 1]
+  def supermodule(target = self)
+  	ancestors[ancestors.index(target) + 1]
   end
 
   def remove_existing_instance_methods(mod)
@@ -23,9 +23,6 @@ class Module
   end
 
   def copy_existing_instance_methods(mod)
-    methods = Module === mod ?
-      (mod.instance_methods(false) + mod.private_instance_methods(false) + mod.protected_instance_methods(false)) : Array(mod)
-
     [nil, 'private', 'protected'].each do |perm|
       perm_s = "#{perm ? perm + '_' : ''}"
       mod.send("#{perm_s}instance_methods", false).each do |m|
