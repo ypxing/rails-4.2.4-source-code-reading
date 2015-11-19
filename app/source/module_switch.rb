@@ -24,7 +24,7 @@ module ModuleSwitch
   end
 
   def method_bank
-    @m_bank ||= const_defined?('BANK') ? const_get('BANK') : const_set('BANK', Module.new)
+    @m_bank ||= const_defined?('BANK') ? const_get('BANK') : const_set('BANK', target_const.instance_of?(Class) ? Class.new(target_const) : Module.new)
   end
 
   def remove_methods_from_target

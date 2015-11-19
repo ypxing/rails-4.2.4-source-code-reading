@@ -1,6 +1,7 @@
 # action_view/renderer/renderer.rb
 module Views
 	module ActionView
+		# ActionView::Renderer is one class in Rails
 		module Renderer
 			extend ModuleSwitch
 
@@ -10,6 +11,7 @@ module Views
 
 			# ActionView::Render's instance method render
 	    def render(context, options)
+	    	byebug
 	      if options.key?(:partial)
 	        render_partial(context, options)
 	      else
