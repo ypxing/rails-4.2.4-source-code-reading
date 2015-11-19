@@ -1,7 +1,7 @@
 class Module
   def instance_method_list(instance_method, location = true)
     ancestors.find_all do |ancestor|
-      (ancestor.instance_methods(false) +
+      (ancestor.public_instance_methods(false) +
         ancestor.protected_instance_methods(false) +
         ancestor.private_instance_methods(false)).include?(instance_method)
     end
@@ -18,7 +18,7 @@ class Module
 
   def remove_existing_instance_methods(mod)
     methods = Module === mod ?
-      (mod.instance_methods(false) + mod.private_instance_methods(false) + mod.protected_instance_methods(false)) : Array(mod)
+      (mod.public_instance_methods(false) + mod.private_instance_methods(false) + mod.protected_instance_methods(false)) : Array(mod)
 
     methods.each do |m|
       remove_method(m) rescue nil
@@ -26,27 +26,31 @@ class Module
   end
 
   def copy_existing_instance_methods(mod, template = mod)
-    [nil, 'private', 'protected'].each do |perm|
-      perm_s = "#{perm ? perm + '_' : ''}"
+    ['public', 'private', 'protected'].each do |perm|
+      perm_s = "#{perm}_"
       template.send("#{perm_s}instance_methods", false).each do |m|
         define_method(m, mod.instance_method(m))
-        send("#{perm}", m) if perm
+        send("#{perm}", m)
       end
     end
   end
 
   def prefix_existing_instance_methods(prefix, template = self, remove_prefix = false)
-    [nil, 'private', 'protected'].each do |perm|
-      perm_s = "#{perm ? perm + '_' : ''}"
-      existing_methods = template.send("#{perm_s}instance_methods", false)
+    ['public', 'private', 'protected'].each do |perm|
+      perm_s = "#{perm}_"
 
       template.send("#{perm_s}instance_methods", false).each do |m|
-        new_name, old_name = ["#{prefix}#{m}", m]
-        new_name, old_name = old_name, new_name if remove_prefix
+        new_name, old_name =
+          if remove_prefix
+            template == self ? [m[prefix.size..-1], m] : [m, "#{prefix}#{m}"]
+          else
+            ["#{prefix}#{m}", m]
+          end
+
         next unless send("#{perm_s}instance_methods", false).include?(old_name.to_sym)
 
         define_method(new_name, instance_method(old_name))
-        send("#{perm}", new_name) if perm
+        send("#{perm}", new_name)
         remove_method(old_name)
       end
     end

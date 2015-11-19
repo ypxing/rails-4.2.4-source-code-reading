@@ -17,3 +17,4 @@
 /tmp
 /.ruby-version
 /*.swp
+/.byebug_history
