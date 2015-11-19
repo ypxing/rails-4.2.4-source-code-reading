@@ -5,10 +5,8 @@ module Views
 
       # Check for double render errors and set the content_type after rendering.
       def render(*args) #:nodoc:
-        byebug
-        # raise ::AbstractController::DoubleRenderError if response_body
-        # super
-        super_method(__callee__, *args)
+        raise ::AbstractController::DoubleRenderError if response_body
+        super
       end
 
       def _normalize_text(options)
@@ -21,7 +19,7 @@ module Views
       end
 
       def render_to_body(options = {})
-        super_method(__callee__, options) || _render_in_priorities(options) || ' '
+        super || _render_in_priorities(options) || ' '
       end
 
       private
@@ -36,8 +34,7 @@ module Views
 
       # Normalize arguments by catching blocks and setting them on :update.
       def _normalize_args(action=nil, options={}, &blk) #:nodoc:
-        # options = super
-        options = super_method(__callee__, action, options, &blk)
+        options = super
         options[:update] = blk if block_given?
         options
       end
@@ -58,8 +55,7 @@ module Views
           options[:status] = Rack::Utils.status_code(options[:status])
         end
 
-        # super
-        super_method(__callee__, options)
+        super
       end
 
       # Process controller specific options, as status, content-type and location.
@@ -70,13 +66,11 @@ module Views
         self.content_type = content_type if content_type
         self.headers["Location"] = url_for(location) if location
 
-        # super
-        super_method(__callee__, options)
+        super
       end
 
       def _process_format(format, options = {})
-        # super
-        super_method(__callee__, format, options)
+        super
         if options[:plain]
           self.content_type = Mime::TEXT
         else

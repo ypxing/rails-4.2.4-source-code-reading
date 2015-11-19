@@ -4,7 +4,7 @@ module Views
 			extend ModuleSwitch
 
 	    def _normalize_options(options) # :nodoc:
-	      super_method(__callee__, options)
+	      super
 
 	      if _include_layout?(options)
 	        layout = options.delete(:layout) { :default }

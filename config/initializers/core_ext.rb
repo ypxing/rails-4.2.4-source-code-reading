@@ -5,7 +5,10 @@ class Module
         ancestor.protected_instance_methods(false) +
         ancestor.private_instance_methods(false)).include?(instance_method)
     end
-  	.map { |x| x.instance_method(instance_method) }
+    .map do |x|
+      m = x.instance_method(instance_method)
+      m.respond_to?(:super_method) && m.super_method ? m.super_method : m
+    end
   	.map { |m| location ? m.source_location : m }.uniq
   end
 
@@ -22,10 +25,10 @@ class Module
     end
   end
 
-  def copy_existing_instance_methods(mod)
+  def copy_existing_instance_methods(mod, template = mod)
     [nil, 'private', 'protected'].each do |perm|
       perm_s = "#{perm ? perm + '_' : ''}"
-      mod.send("#{perm_s}instance_methods", false).each do |m|
+      template.send("#{perm_s}instance_methods", false).each do |m|
         define_method(m, mod.instance_method(m))
         send("#{perm}", m) if perm
       end

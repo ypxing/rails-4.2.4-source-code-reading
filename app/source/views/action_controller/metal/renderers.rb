@@ -6,8 +6,7 @@ module Views
 			def render_to_body(options)
 				# 1. _render_to_body_with_renderer(options) is for render json: ... (or :js, :xml, customized format)
 				# 2. super is for render :show (most normal case)
-				# _render_to_body_with_renderer(options) || super
-				_render_to_body_with_renderer(options) || super_method(__callee__, options)
+				_render_to_body_with_renderer(options) || super
 			end
 
 	    def _render_to_body_with_renderer(options)

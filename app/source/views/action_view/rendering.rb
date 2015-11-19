@@ -67,8 +67,7 @@ module Views
 
       # Assign the rendered format to lookup context.
       def _process_format(format, options = {}) #:nodoc:
-        # super
-        super_method(__callee__, format, options)
+        super
 
         # before the assignment, lookup_context.formats is
         # [:html, :text, :js, :css, :ics, :csv, :vcf, :png, :jpeg, :gif, :bmp, :tiff, :mpeg, :xml, :rss, :atom, :yaml, :multipart_form, :url_encoded_form, :json, :pdf, :zip]
@@ -81,8 +80,7 @@ module Views
       # render "foo/bar" to render :template => "foo/bar".
       # :api: private
       def _normalize_args(action=nil, options={})
-        # options = super(action, options)
-        options = super_method(__callee__, action, options)
+        options = super(action, options)
         case action
         when NilClass
         when Hash
@@ -101,7 +99,7 @@ module Views
       # Normalize options.
       # :api: private
       def _normalize_options(options)
-        options = super_method(__callee__, options)
+        options = super
         if options[:partial] == true
           options[:partial] = action_name
         end
