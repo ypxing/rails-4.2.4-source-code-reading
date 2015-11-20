@@ -1,5 +1,5 @@
 class Module
-  def instance_method_list(instance_method, location = true)
+  def instance_method_inheritance_list(instance_method, location = true)
     ancestors.find_all do |ancestor|
       (ancestor.public_instance_methods(false) +
         ancestor.protected_instance_methods(false) +
@@ -12,9 +12,9 @@ class Module
   	.map { |m| location ? m.source_location : m }.uniq
   end
 
-  def supermodule(target = self)
-  	ancestors[ancestors.index(target) + 1]
-  end
+  # def supermodule(target = self)
+  # 	ancestors[ancestors.index(target) + 1]
+  # end
 
   def remove_existing_instance_methods(mod)
     methods = Module === mod ?
