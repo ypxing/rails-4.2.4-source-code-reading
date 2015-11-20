@@ -1,32 +1,32 @@
 module Views
-	module ActionView
-		# ::ActionView::Template is one class in Rails
+  module ActionView
+    # ::ActionView::Template is one class in Rails
 
     # make ERB happy.
     # the compiled "code" string will use "ActionView::OutputBuffer"
     OutputBuffer = ::ActionView::OutputBuffer
 
-		module Template
-      extend ModuleSwitch
+    module Template
+      extend ModuleShims::Switch
 
-	    # Render a template. If the template was not compiled yet, it is done
-	    # exactly before rendering.
-	    #
-	    # This method is instrumented as "!render_template.action_view". Notice that
-	    # we use a bang in this instrumentation because you don't want to
-	    # consume this in production. This is only slow if it's being listened to.
+      # Render a template. If the template was not compiled yet, it is done
+      # exactly before rendering.
+      #
+      # This method is instrumented as "!render_template.action_view". Notice that
+      # we use a bang in this instrumentation because you don't want to
+      # consume this in production. This is only slow if it's being listened to.
 
-	    # view here is one view_context
-	    def render(view, locals, buffer=nil, &block)
-	      instrument("!render_template") do
-	        compile!(view)
+      # view here is one view_context
+      def render(view, locals, buffer=nil, &block)
+        instrument("!render_template") do
+          compile!(view)
 
-	        # call method _app_views_users_show_htm_erb__xxxxxxxx_xxxxxxxx
-	        view.send(method_name, locals, buffer, &block)
-	      end
-	    rescue => e
-	      handle_render_error(view, e)
-	    end
+          # call method _app_views_users_show_htm_erb__xxxxxxxx_xxxxxxxx
+          view.send(method_name, locals, buffer, &block)
+        end
+      rescue => e
+        handle_render_error(view, e)
+      end
 
     protected
 
@@ -150,6 +150,6 @@ module Views
           m
         end
       end
-		end
-	end
+    end
+  end
 end

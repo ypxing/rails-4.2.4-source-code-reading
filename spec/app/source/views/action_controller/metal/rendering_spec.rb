@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Views::ActionController::Rendering do
   context "enable this module" do
     before do
-      Views::ActionController::Rendering.enable
+      Views::ActionController::Rendering.enable_shim
     end
 
     it "should do render" do

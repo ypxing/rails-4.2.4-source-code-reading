@@ -1,7 +1,7 @@
 module Views
-	module ActionController
-		module Rendering
-      extend ModuleSwitch
+  module ActionController
+    module Rendering
+      extend ModuleShims::Switch
 
       # Check for double render errors and set the content_type after rendering.
       def render(*args) #:nodoc:
@@ -78,6 +78,6 @@ module Views
         end
       end
 
-		end
-	end
+    end
+  end
 end

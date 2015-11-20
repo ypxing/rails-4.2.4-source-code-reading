@@ -4,7 +4,7 @@ module Views
       module Handlers
         # ::ActionView::Template::Handlers
         module ERB
-          extend ModuleSwitch
+          extend ModuleShims::Switch
 
           def self.prepended(mod)
             mod.class_eval do

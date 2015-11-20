@@ -15,7 +15,7 @@ trace = TracePoint.new(:class) do |tp|
       Views::ActionView::Renderer
     ).find { |src| tp.self.name == src.gsub(/\A[^:]+::/, '') }
 
-  src_mod.constantize.insert if src_mod
+  src_mod.constantize.insert_shim if src_mod
 end
 
 trace.enable

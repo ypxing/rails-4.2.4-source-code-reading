@@ -1,32 +1,32 @@
 # lib/action_view/rendering.rb
 module Views
-	module ActionView
-		module Rendering
-			extend ModuleSwitch
+  module ActionView
+    module Rendering
+      extend ModuleShims::Switch
 
-	    def render_to_body(options = {})
-	    	# in Views::AbstractController::Rendering
-	      _process_options(options)
+      def render_to_body(options = {})
+        # in Views::AbstractController::Rendering
+        _process_options(options)
 
-	      _render_template(options)
-	    end
+        _render_template(options)
+      end
 
-	    def view_renderer
-	    	@_view_renderer ||= ::ActionView::Renderer.new(lookup_context)
-	    end
+      def view_renderer
+        @_view_renderer ||= ::ActionView::Renderer.new(lookup_context)
+      end
 
-	    def view_context
-	    	# view_assigns is defined in abstract controller
+      def view_context
+        # view_assigns is defined in abstract controller
         # each pair (key/value) in view_assigns will become one instance variable
         # and its value in instance of view_context_class.
-	    	view_context_class.new(view_renderer, view_assigns, self)
-	    end
+        view_context_class.new(view_renderer, view_assigns, self)
+      end
 
-	    # it's one class method in Rails source code
+      # it's one class method in Rails source code
       def view_context_class
         @view_context_class ||= begin
-        	# supports_path?: only action controller supports path
-        	# email only supports full url
+          # supports_path?: only action controller supports path
+          # email only supports full url
           supports_path = self.class.supports_path?
           routes  = self.class.respond_to?(:_routes)  && self.class._routes
           helpers = self.class.respond_to?(:_helpers) && self.class._helpers
@@ -103,6 +103,6 @@ module Views
         options[:template] ||= (options[:action] || action_name).to_s
         options
       end
-		end
-	end
+    end
+  end
 end

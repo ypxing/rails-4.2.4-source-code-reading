@@ -44,6 +44,7 @@ group :development, :test do
   # gem 'spring'
 
   gem 'rspec-rails'
+  gem 'module_shims', '~> 0.2.1'
 end
 
 

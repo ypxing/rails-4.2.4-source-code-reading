@@ -1,7 +1,7 @@
 module Views
   module ActionView
     module Layouts
-      extend ModuleSwitch
+      extend ModuleShims::Switch
 
       def _normalize_options(options) # :nodoc:
         super
