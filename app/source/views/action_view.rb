@@ -1,3 +1,5 @@
+require_relative './action_view/lookup_context'
+
 module Views
 	module ActionView
 		extend ActiveSupport::Autoload

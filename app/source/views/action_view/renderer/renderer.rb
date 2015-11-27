@@ -11,7 +11,6 @@ module Views
 
       # ActionView::Render's instance method render
       def render(context, options)
-        byebug
         if options.key?(:partial)
           render_partial(context, options)
         else
